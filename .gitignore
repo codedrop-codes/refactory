@@ -1,0 +1,7 @@
+node_modules/
+.env
+.env.*
+tmp/
+*.monolith
+.DS_Store
+test-corpus/

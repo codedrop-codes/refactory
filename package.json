@@ -1,0 +1,47 @@
+{
+  "name": "@refactory/mcp",
+  "version": "0.2.0",
+  "description": "Mechanical code decomposition. AI plans module boundaries, deterministic extraction copies the code. JS/Python built in.",
+  "main": "src/server.js",
+  "bin": {
+    "refactory": "src/cli.js"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test tests/**/*.test.js",
+    "analyze": "node src/cli.js analyze",
+    "decompose": "node src/cli.js decompose",
+    "demo": "node scripts/demo.js"
+  },
+  "keywords": [
+    "mcp",
+    "refactoring",
+    "decomposition",
+    "monolith",
+    "modular",
+    "ai",
+    "llm",
+    "claude-code",
+    "cursor",
+    "code-splitting"
+  ],
+  "author": "codedrop-codes",
+  "license": "AGPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codedrop-codes/refactory.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "src/",
+    "docs/",
+    "README.md",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "@ast-grep/napi": "^0.42.1",
+    "@modelcontextprotocol/sdk": "^1.29.0"
+  }
+}

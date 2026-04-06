@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&amp;display=swap');
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0d1117"/>
+
+  <!-- Top border accent -->
+  <rect width="1200" height="3" fill="#3fb950"/>
+
+  <!-- Terminal window -->
+  <rect x="60" y="180" width="680" height="280" rx="8" fill="#010409" stroke="#30363d" stroke-width="1"/>
+  <!-- Terminal bar -->
+  <rect x="60" y="180" width="680" height="36" rx="8" fill="#161b22"/>
+  <rect x="60" y="204" width="680" height="12" fill="#161b22"/>
+  <circle cx="86" cy="198" r="6" fill="#f85149"/>
+  <circle cx="108" cy="198" r="6" fill="#d29922"/>
+  <circle cx="130" cy="198" r="6" fill="#3fb950"/>
+
+  <!-- Terminal text -->
+  <text x="80" y="244" font-family="'JetBrains Mono', monospace" font-size="13" fill="#3fb950">$</text>
+  <text x="96" y="244" font-family="'JetBrains Mono', monospace" font-size="13" fill="#e6edf3"> npx @refactory/mcp decompose app.js</text>
+
+  <text x="80" y="268" font-family="'JetBrains Mono', monospace" font-size="13" fill="#8b949e">Refactory: analyzing app.js (3,847 lines, 94 functions)</text>
+  <text x="80" y="290" font-family="'JetBrains Mono', monospace" font-size="13" fill="#8b949e">Refactory: planning... 8 modules via gemini-flash</text>
+  <text x="80" y="312" font-family="'JetBrains Mono', monospace" font-size="13" fill="#8b949e">Refactory: extracting [1/8] auth.js...        <tspan fill="#3fb950">312L OK</tspan></text>
+  <text x="80" y="334" font-family="'JetBrains Mono', monospace" font-size="13" fill="#8b949e">Refactory: extracting [2/8] db-queries.js...   <tspan fill="#3fb950">489L OK</tspan></text>
+  <text x="80" y="356" font-family="'JetBrains Mono', monospace" font-size="13" fill="#8b949e">Refactory: fixing imports... <tspan fill="#58a6ff">17 paths rewritten</tspan></text>
+  <text x="80" y="378" font-family="'JetBrains Mono', monospace" font-size="13" fill="#8b949e">Refactory: verify: <tspan fill="#3fb950">8/8 modules clean</tspan></text>
+  <text x="80" y="408" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="700" fill="#3fb950">Refactory Score: 1.0  |  3847L → 8 modules  |  $0</text>
+
+  <!-- Right side: headline -->
+  <text x="800" y="260" font-family="'JetBrains Mono', monospace" font-size="42" font-weight="700" fill="#e6edf3">Break</text>
+  <text x="800" y="312" font-family="'JetBrains Mono', monospace" font-size="42" font-weight="700" fill="#e6edf3">monoliths</text>
+  <text x="800" y="364" font-family="'JetBrains Mono', monospace" font-size="42" font-weight="700" fill="#e6edf3">into modules.</text>
+  <text x="800" y="416" font-family="'JetBrains Mono', monospace" font-size="42" font-weight="700" fill="#3fb950">Free.</text>
+
+  <!-- Stats row -->
+  <text x="800" y="470" font-family="'JetBrains Mono', monospace" font-size="13" fill="#8b949e">20,710 lines decomposed at $0</text>
+
+  <!-- URL -->
+  <text x="800" y="510" font-family="'JetBrains Mono', monospace" font-size="12" fill="#30363d">refactory.codedrop.codes</text>
+
+  <!-- Logo / name bottom left -->
+  <text x="80" y="560" font-family="'JetBrains Mono', monospace" font-size="22" font-weight="700" fill="#3fb950">Refactory</text>
+  <text x="80" y="585" font-family="'JetBrains Mono', monospace" font-size="12" fill="#8b949e">Mechanical code decomposition · MCP + CLI · AGPL-3.0</text>
+</svg>

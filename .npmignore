@@ -1,0 +1,11 @@
+docs/
+website/
+tests/
+examples/
+.env*
+.git*
+*.monolith
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+SECURITY.md
+CHANGELOG.md

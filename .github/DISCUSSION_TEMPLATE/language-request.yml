@@ -1,0 +1,33 @@
+title: "[Language] "
+labels:
+  - language-request
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Request support for a new language. Mechanical preprocessors eliminate LLM tokens entirely — your language could be next.
+  - type: input
+    id: language
+    attributes:
+      label: Language
+      placeholder: "e.g. Rust, Go, Ruby, PHP"
+    validations:
+      required: true
+  - type: textarea
+    id: syntax
+    attributes:
+      label: Key syntax patterns
+      description: "What makes function boundaries tricky in this language?"
+      placeholder: |
+        - Functions declared with `fn name() {}`
+        - Impl blocks group methods
+        - Macros can generate functions
+    validations:
+      required: false
+  - type: textarea
+    id: samples
+    attributes:
+      label: Sample files
+      description: "Link to or paste example monolith files in this language (open source repos preferred)"
+    validations:
+      required: false

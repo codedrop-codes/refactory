@@ -1,0 +1,32 @@
+GNU AFFERO GENERAL PUBLIC LICENSE
+Version 3, 19 November 2007
+
+Copyright (c) 2026 codedrop-codes
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+Additional permission under GNU AGPL version 3 section 7:
+
+If you modify this Program, or any covered work, by linking or combining
+it with proprietary language preprocessors obtained from the Refactory
+marketplace ("Premium Packs"), the resulting work is not required to be
+covered by the AGPL solely because of that combination, provided the
+Premium Packs remain unmodified and are used only through the documented
+plugin interface.
+
+---
+
+NOTICE: Premium language preprocessors (Go, Rust, Java, C#, Kotlin, Swift)
+are available under a separate commercial license from codedrop-codes.
+See https://refactory.codedrop.codes/pro for details.

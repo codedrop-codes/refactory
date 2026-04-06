@@ -1,0 +1,6 @@
+title: Refactory
+description: Mechanical code decomposition. AI plans the boundaries. Deterministic extraction copies the code.
+theme: jekyll-theme-midnight
+baseurl: /refactory
+url: https://codedrop-codes.github.io
+show_downloads: false
