@@ -6,10 +6,10 @@ Refactory decomposes monoliths in 7 steps. Each step is an independent MCP tool 
 
 ```
   ANALYZE  -->  CHARACTERIZE  -->  PLAN  -->  EXTRACT  -->  FIX-IMPORTS  -->  VERIFY  -->  METRICS
-  (local)       (local)           (LLM)      (LLM)        (local)           (local)      (local)
+  (mechanical)  (mechanical)      (LLM)     (mechanical)  (mechanical)     (mechanical)  (mechanical)
 ```
 
-Steps marked **(local)** run entirely on your machine with no API calls. Steps marked **(LLM)** route to free-tier providers.
+6 of 7 steps are **mechanical** — deterministic, no API calls, instant. Only PLAN uses an LLM (to decide module boundaries). For supported languages (JS/Python), extraction is mechanical. For other languages, extraction falls back to LLM with adaptive compression.
 
 ---
 
@@ -82,19 +82,35 @@ The LLM returns a JSON plan: which functions go in which module, estimated sizes
 ## Step 4: Extract
 
 **Tool:** `refactory_extract`
-**Input:** `{ file, module, functions?, outputDir?, plan? }`
-**Output:** `{ module, outputPath, lines, provider, syntaxValid, syntaxError }`
+**Input:** `{ file, module, functions?, outputDir?, forceLlm? }`
+**Output:** `{ module, outputPath, lines, provider, syntaxValid, syntaxError, mechanical }`
 
-Sends the full source + extraction instructions to the LLM. The prompt specifies which functions to extract, requires `"use strict"`, preserves exact signatures, and demands complete output (no truncation).
+**Hybrid extraction — mechanical first, LLM fallback.**
 
-**Provider selection:** Extraction needs high output tokens. Groq (32k) is preferred because other free providers cap at 8-16k, which truncates modules over ~400 lines. The router checks `preferHighOutput` and routes to the LARGE_OUTPUT capability slot first.
+### Mechanical path (JS, Python — default)
 
-**Post-processing:**
-1. Strip markdown fences -- ~30% of LLM responses wrap code in ` ```javascript ` fences that break .js files
-2. Write to disk
-3. Validate syntax with `node --check`
+If a language preprocessor exists for the file type, extraction is 100% mechanical:
 
-If syntax validation fails, the error is returned in the output. The caller decides whether to retry or fix manually.
+1. **Detect functions** by parsing — brace matching (JS) or indentation (Python)
+2. **Copy function bodies** by line range — exact copy, no rewriting
+3. **Resolve imports** — scan each function for references to require()/import identifiers
+4. **Assemble module** — "use strict" + selective imports + function bodies + module.exports
+
+Result: zero LLM tokens, instant, guaranteed syntax validity. The provider field shows `mechanical/javascript` or `mechanical/python`.
+
+### LLM fallback (other languages)
+
+For unsupported languages, falls back to LLM extraction with adaptive compression (CodeDrop v2 algorithm — keyword mapping + indentation compression). The compressed source uses fewer tokens, and the output is decompressed after extraction.
+
+**Post-processing (both paths):**
+1. Strip markdown fences (LLM path only)
+2. Decompress output (LLM path only)
+3. Write to disk
+4. Validate syntax with `node --check`
+
+**Auto-retry (LLM path):** On syntax failure, retries once (provider fallback may pick a different model). If still failing and the module has 4+ functions, splits the function list in half, extracts each half separately, combines the outputs.
+
+Set `forceLlm: true` to skip the mechanical path and use LLM extraction directly.
 
 ---
 
