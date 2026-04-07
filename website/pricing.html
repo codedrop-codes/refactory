@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FL383YRX24"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-FL383YRX24');</script>
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","w82esixpwd");</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing | Refactory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 3rem;
+            padding: 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 3.5rem;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--accent);
+            box-shadow: 0 0 40px rgba(88, 166, 255, 0.1);
+        }
+
+        .pricing-card:hover {
+            border-color: var(--accent-dim);
+        }
+
+        .plan-name {
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .plan-price {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .plan-price span {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 3rem;
+            flex-grow: 1;
+        }
+
+        .plan-features li {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .plan-features li::before {
+            content: "\2714";
+            color: var(--success);
+            font-weight: 800;
+        }
+
+        .btn-large {
+            width: 100%;
+            text-align: center;
+            padding: 1.25rem;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <nav>
+            <a href="index.html" class="logo">
+                <img src="assets/logo.png" alt="Refactory Logo">
+                <span class="mono">REFACTORY</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Overview</a></li>
+                <li><a href="how-it-works.html">How It Works</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="pricing.html" class="active">Pricing</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section style="padding: 6rem 4rem 2rem; text-align: center;">
+                <h1 class="section-title">Open Core, Pure Value</h1>
+                <p class="section-desc">Refactory is built on the principle that the heart of your engineering tools should be free and open. No subscriptions for core deterministic extraction.</p>
+            </section>
+
+            <div class="pricing-grid">
+                <div class="pricing-card featured">
+                    <span class="plan-name">Community</span>
+                    <div class="plan-price">$0<span> / forever</span></div>
+                    <ul class="plan-features">
+                        <li>Unlimited Deterministic Extraction</li>
+                        <li>JS / TS & Python Preprocessors</li>
+                        <li>Golden Export Snapshots</li>
+                        <li>Refactory Score Verification</li>
+                        <li>AGPL-3.0 License</li>
+                        <li>Community Support</li>
+                    </ul>
+                    <a href="https://github.com/codedrop-codes/refactory" class="btn btn-primary btn-large">Get Started on GitHub</a>
+                </div>
+
+                <div class="pricing-card">
+                    <span class="plan-name">Enterprise</span>
+                    <div class="plan-price">Custom</div>
+                    <ul class="plan-features">
+                        <li>Premium Language Packs (Go, Rust, etc.)</li>
+                        <li>Custom AST-grep Rulesets</li>
+                        <li>SLA-backed Technical Support</li>
+                        <li>Enterprise Security Audits</li>
+                        <li>Commercial Usage License</li>
+                        <li>Private CI Integration</li>
+                    </ul>
+                    <a href="https://discord.gg/kPk3NmRD" class="btn btn-secondary btn-large">Contact Sales</a>
+                </div>
+            </div>
+
+            <section style="padding: 4rem; text-align: center;">
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Looking for hosted decomposition? Check out <a href="https://codedrop.codes" style="color: var(--accent);">CodeDrop Pro</a>.</p>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-copy">
+                    &copy; 2026 CodeDrop. Open Core under AGPL-3.0.
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/codedrop-codes/refactory">GitHub</a>
+                    <a href="https://discord.gg/kPk3NmRD">Discord</a>
+                    <a href="https://codedrop.codes">CodeDrop</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

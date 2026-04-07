@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FL383YRX24"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-FL383YRX24');</script>
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","w82esixpwd");</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ | Refactory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="page">
+        <nav>
+            <a href="index.html" class="logo">
+                <img src="assets/logo.png" alt="Refactory Logo">
+                <span class="mono">REFACTORY</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Overview</a></li>
+                <li><a href="how-it-works.html">How It Works</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="faq.html" class="active">FAQ</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+            </ul>
+        </nav>
+
+        <main style="padding: 6rem 4rem; max-width: 900px; margin: 0 auto;">
+            <h1 class="section-title">Common Questions</h1>
+            <p class="section-desc">Technical details about the Refactory hybrid engine.</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <div class="stat-card">
+                    <h3 class="mono" style="color: var(--accent); margin-bottom: 1rem; font-size: 1.1rem;">How do Golden Snapshots prevent regressions?</h3>
+                    <p style="font-size: 0.95rem; color: var(--text-secondary);">Before any decomposition, Refactory scans the monolith and records every exported name and its <code>typeof</code>. After extraction, it compares the new modular surface against this snapshot. If a function was lost, renamed, or changed from a function to an object, the verifier catches it instantly.</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3 class="mono" style="color: var(--accent); margin-bottom: 1rem; font-size: 1.1rem;">What is Adaptive Compression?</h3>
+                    <p style="font-size: 0.95rem; color: var(--text-secondary);">Planning a 20,000 line decomposition would exceed most LLM context windows if we sent the full source. Refactory sends a <strong>compressed function map</strong> (metadata only) which is 10x smaller. The AI reasons about the map, and our deterministic engine performs the actual extraction using the original local source.</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3 class="mono" style="color: var(--accent); margin-bottom: 1rem; font-size: 1.1rem;">How does ast-grep integration work?</h3>
+                    <p style="font-size: 0.95rem; color: var(--text-secondary);">Refactory uses <code>ast-grep</code> for deep AST analysis. This allows us to identify "hot" routines, track cyclomatic complexity, and detect magic numbers or "HACK" comments with much higher precision than simple regex scanners.</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3 class="mono" style="color: var(--accent); margin-bottom: 1rem; font-size: 1.1rem;">Is it truly $0 token cost?</h3>
+                    <p style="font-size: 0.95rem; color: var(--text-secondary);">Mostly, yes. You need a free key (Groq or Gemini) for the <strong>PLAN</strong> step (deciding boundaries). The <strong>EXTRACT</strong> step for JS and Python handles the routine moves locally and deterministically. The AI still handles complex edge cases, but the bulk of the extraction costs nothing.</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3 class="mono" style="color: var(--accent); margin-bottom: 1rem; font-size: 1.1rem;">Which languages are supported?</h3>
+                    <p style="font-size: 0.95rem; color: var(--text-secondary);">JS/TS and Python have built-in deterministic preprocessors that handle the straightforward extractions with high syntax fidelity. Premium language packs (Go, Rust, Java, etc.) are planned for enterprise users. Other languages use LLM-based extraction with adaptive compression.</p>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-copy">
+                    &copy; 2026 CodeDrop. Open Core under AGPL-3.0.
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/codedrop-codes/refactory">GitHub</a>
+                    <a href="https://discord.gg/kPk3NmRD">Discord</a>
+                    <a href="https://codedrop.codes">CodeDrop</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

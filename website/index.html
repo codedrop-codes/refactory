@@ -1,369 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Refactory - Mechanical code decomposition. Free.</title>
-  <meta name="description" content="Decompose monoliths into clean modules — mechanically. AI plans the boundaries, deterministic extraction copies the code. Zero hallucinations, guaranteed syntax, $0.">
-  <meta property="og:title" content="Refactory — Mechanical code decomposition. Free.">
-  <meta property="og:description" content="AI plans module boundaries. Deterministic extraction copies the code. 32,000+ lines decomposed, 100% syntax valid, $0.">
-  <meta property="og:url" content="https://refactory.codedrop.codes">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="https://refactory.codedrop.codes/og-image.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Refactory — Mechanical code decomposition">
-  <meta name="twitter:description" content="AI plans. Code copies. Zero hallucinations. Free.">
-  <meta name="twitter:image" content="https://refactory.codedrop.codes/og-image.png">
-  <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="stylesheet" href="style.css">
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FL383YRX24"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-FL383YRX24');</script>
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","w82esixpwd");</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refactory | Hybrid Code Decomposition</title>
+    <meta name="description" content="AI plans the module boundaries. A deterministic engine handles the routine 80%. Minimize tokens, maximize syntax validity for JS/TS and Python.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="page">
+        <nav>
+            <a href="index.html" class="logo">
+                <img src="assets/logo.png" alt="Refactory Logo">
+                <span class="mono">REFACTORY</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Overview</a></li>
+                <li><a href="how-it-works.html">How It Works</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+            </ul>
+        </nav>
 
-<!-- Early Access Banner -->
-<div style="background:#238636;text-align:center;padding:8px 16px;font-size:0.8rem;color:#fff;">
-  Early access — we're looking for testers. <a href="https://discord.gg/kPk3NmRD" style="color:#fff;text-decoration:underline;font-weight:700;">Join Discord</a> to help shape v1.0. Expect rough edges. <a href="https://github.com/codedrop-codes/refactory/issues/new?template=broken-extraction.md" style="color:#fff;text-decoration:underline;">Report what breaks</a>.
-</div>
+        <main>
+            <section class="hero">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        Hybrid <span class="highlight">Decomposition</span><br>
+                        for Monoliths
+                    </h1>
+                    <p class="hero-desc">
+                        Minimize tokens. Maximize syntax validity. AI plans the module boundaries, a deterministic engine handles the routine extractions. The AI focuses on the parts that actually need intelligence.
+                    </p>
+                    
+                    <div class="hero-stats">
+                        <div class="stat-card">
+                            <span class="stat-value">15/15</span>
+                            <span class="stat-label">Monoliths Extracted</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">0.89</span>
+                            <span class="stat-label">Pipeline Score</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">1,017</span>
+                            <span class="stat-label">Functions Extracted</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">$0.00</span>
+                            <span class="stat-label">Extraction Cost</span>
+                        </div>
+                    </div>
 
-<!-- Nav -->
-<nav class="topnav">
-  <div class="container nav-inner">
-    <a href="#" class="nav-logo"><img src="assets/logo.png" alt="Refactory" style="height:28px;vertical-align:middle;margin-right:8px">Refactory</a>
-    <div class="nav-links">
-      <a href="#results">Results</a>
-      <a href="#quickstart">Quick Start</a>
-      <a href="#pipeline">Pipeline</a>
-      <a href="#providers">Providers</a>
-      <a href="https://github.com/codedrop-codes/refactory">GitHub</a>
-      <a href="https://discord.gg/kPk3NmRD">Discord</a>
+                    <div class="hero-ctas">
+                        <a href="https://github.com/codedrop-codes/refactory" class="btn btn-primary">Start Decomposing</a>
+                        <a href="https://discord.gg/kPk3NmRD" class="btn btn-secondary">Join Community</a>
+                    </div>
+                </div>
+
+                <div class="hero-visual">
+                    <img src="assets/terminal-demo.png" alt="Refactory Terminal Demo" class="hero-image">
+                </div>
+            </section>
+
+            <section style="padding: 4rem; background: var(--bg-secondary); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+                <div style="max-width: 1000px; margin: 0 auto; text-align: center;">
+                    <h2 class="section-title" style="font-size: 2rem;">Why Hybrid?</h2>
+                    <p class="section-desc">AI is great at deciding where to split. It's terrible at copying code faithfully&mdash;truncations, dropped <code>async/await</code>, mangled template literals. Refactory uses AI for the brains and deterministic extraction for the brawn.</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 4rem;">
+                        <div class="stat-card">
+                            <h3 class="mono" style="color: var(--accent); font-size: 1rem; margin-bottom: 1rem;">JS / TS</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary);">Mechanical extraction built-in. Brace-matching aware.</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 class="mono" style="color: var(--accent); font-size: 1rem; margin-bottom: 1rem;">Python</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary);">Indentation-based deterministic decomposition.</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 class="mono" style="color: var(--accent); font-size: 1rem; margin-bottom: 1rem;">Any Language</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary);">Adaptive compression fallback for everything else.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-copy">
+                    &copy; 2026 CodeDrop. Open Core under AGPL-3.0.
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/codedrop-codes/refactory">GitHub</a>
+                    <a href="https://discord.gg/kPk3NmRD">Discord</a>
+                    <a href="https://codedrop.codes">CodeDrop</a>
+                </div>
+            </div>
+        </footer>
     </div>
-  </div>
-</nav>
-
-<!-- Hero -->
-<header class="hero" id="hero">
-  <div class="container">
-    <h1>Refactor your monoliths. <span>Mechanically. Free.</span></h1>
-    <p class="subtitle">AI plans where to split. Deterministic extraction copies the code. Zero hallucinations, guaranteed syntax validity, one quality score. JS &amp; Python built in.</p>
-
-    <div class="terminal">
-      <div class="terminal-bar">
-        <div class="terminal-dot r"></div>
-        <div class="terminal-dot y"></div>
-        <div class="terminal-dot g"></div>
-        <span class="terminal-title">terminal</span>
-      </div>
-      <div class="terminal-body">
-        <div><span class="prompt">$</span> npx @refactory/mcp decompose message-broker.js</div>
-        <div class="dim">Refactory: analyzing message-broker.js (5207 lines, 154 functions)</div>
-        <div class="dim">Refactory: characterize: 48 exports snapshotted</div>
-        <div class="dim">Refactory: planning decomposition... 17 modules via gemini-flash <span class="info">(49s)</span></div>
-        <div class="dim">Refactory: extracting [1/17] utils.js... <span class="ok">244L OK</span> via <span class="info">mechanical/js</span> <span class="dim">(34ms)</span></div>
-        <div class="dim">Refactory: extracting [2/17] db-core.js... <span class="ok">171L OK</span> via <span class="info">mechanical/js</span> <span class="dim">(30ms)</span></div>
-        <div class="dim">Refactory: extracting [3/17] db-schema.js... <span class="ok">448L OK</span> via <span class="info">mechanical/js</span> <span class="dim">(25ms)</span></div>
-        <div class="dim">Refactory: extracting [4/17] message-processing.js... <span class="ok">471L OK</span> via <span class="info">mechanical/js</span> <span class="dim">(32ms)</span></div>
-        <div class="dim">Refactory: extracting [5/17] event-hooks.js... <span class="ok">660L OK</span> via <span class="info">mechanical/js</span> <span class="dim">(26ms)</span></div>
-        <div class="dim">Refactory: ...</div>
-        <div class="dim">Refactory: fix-imports: <span class="info">4 paths rewritten</span></div>
-        <div class="dim">Refactory: verify: <span class="ok">17/17 modules syntax valid</span></div>
-        <div><span class="ok">Score: 0.89</span> | 5207L &rarr; 17 modules | extraction: <span class="ok">&lt;1s</span> | $0</div>
-      </div>
-    </div>
-
-    <div class="hero-actions">
-      <a href="#quickstart" class="btn btn-primary">Get started</a>
-      <a href="https://github.com/codedrop-codes/refactory" class="btn btn-outline">View on GitHub</a>
-    </div>
-  </div>
-</header>
-
-<!-- Stats -->
-<div class="container" id="results">
-  <div class="stats">
-    <div class="stat"><div class="num">32,736</div><div class="label">lines decomposed</div></div>
-    <div class="stat"><div class="num">100%</div><div class="label">syntax valid</div></div>
-    <div class="stat"><div class="num">0</div><div class="label">hallucinations</div></div>
-    <div class="stat"><div class="num">$0</div><div class="label">API cost</div></div>
-  </div>
-</div>
-
-<!-- Case Study (social proof — before pipeline explanation) -->
-<section id="case-study">
-  <div class="container">
-    <h2>Real result: message-broker.js</h2>
-    <p class="lead">5,207 lines of monolithic message processing &rarr; 17 clean modules in under 60 seconds at $0.</p>
-    <div class="case">
-      <div class="case-problem">
-        <div class="case-label">Before</div>
-        <div class="case-before">
-          <div class="file-block bad">message-broker.js<span>5,207 lines</span></div>
-          <p class="meta">Message routing, task lifecycle, queue management, database schema, CLI parsing, and event hooks — all in one file.</p>
-        </div>
-      </div>
-
-      <div class="arrow-down">&#x2193;</div>
-
-      <div class="case-label">After</div>
-      <div class="modules-grid">
-        <div class="mod"><div class="mname">utils.js</div><div class="mlines">244 lines</div></div>
-        <div class="mod"><div class="mname">db-core.js</div><div class="mlines">171 lines</div></div>
-        <div class="mod"><div class="mname">db-schema.js</div><div class="mlines">448 lines</div></div>
-        <div class="mod"><div class="mname">config-args.js</div><div class="mlines">338 lines</div></div>
-        <div class="mod"><div class="mname">message-processing.js</div><div class="mlines">471 lines</div></div>
-        <div class="mod"><div class="mname">routing-auth.js</div><div class="mlines">124 lines</div></div>
-        <div class="mod"><div class="mname">task-lifecycle.js</div><div class="mlines">107 lines</div></div>
-        <div class="mod"><div class="mname">commands-query.js</div><div class="mlines">416 lines</div></div>
-        <div class="mod"><div class="mname">commands-actions.js</div><div class="mlines">289 lines</div></div>
-        <div class="mod"><div class="mname">event-hooks.js</div><div class="mlines">660 lines</div></div>
-      </div>
-
-      <div class="case-stats">
-        <div>Score: <span>0.89</span></div>
-        <div>Cost: <span>$0</span></div>
-        <div>Time: <span>&lt;60s</span></div>
-        <div>Extraction: <span>mechanical</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Quick Start -->
-<section id="quickstart">
-  <div class="container">
-    <h2>Quick start</h2>
-    <p class="lead">One free API key is all you need. Get a <a href="https://console.groq.com" target="_blank">Groq key</a> (free, no credit card) and you're running in 60 seconds.</p>
-
-    <div class="quickstart-steps">
-      <div class="qs-step">
-        <div class="qs-num">1</div>
-        <div class="qs-body">
-          <div class="qs-title">Add to your MCP config</div>
-          <div class="code-block"><pre>{
-  "mcpServers": {
-    "refactory": {
-      "command": "npx",
-      "args": ["@refactory/mcp"],
-      "env": { "GROQ_API_KEY": "your-key-here" }
-    }
-  }
-}</pre></div>
-        </div>
-      </div>
-      <div class="qs-step">
-        <div class="qs-num">2</div>
-        <div class="qs-body">
-          <div class="qs-title">Tell your AI tool to decompose a file</div>
-          <div class="command-block"><span class="prompt">&gt;</span> Analyze and decompose src/big-file.js into modules</div>
-        </div>
-      </div>
-      <div class="qs-step">
-        <div class="qs-num">3</div>
-        <div class="qs-body">
-          <div class="qs-title">Or use the CLI directly</div>
-          <div class="command-block"><span class="prompt">$</span> npx @refactory/mcp decompose src/big-file.js</div>
-        </div>
-      </div>
-    </div>
-
-    <p class="qs-note">No API key yet? Run <code>npm run demo</code> after cloning — it decomposes a sample file locally with no keys required.</p>
-  </div>
-</section>
-
-<!-- Pipeline -->
-<section id="pipeline">
-  <div class="container">
-    <h2>Hybrid pipeline</h2>
-    <p class="lead">AI plans the boundaries. Code does the extraction. One command.</p>
-
-    <div class="pipeline">
-      <div class="step mech">
-        <span class="num">1</span>
-        <span class="name">ANALYZE</span>
-        <span class="desc">Scan file health, function map, dependencies — mechanical</span>
-      </div>
-      <div class="step mech">
-        <span class="num">2</span>
-        <span class="name">CHARACTERIZE</span>
-        <span class="desc">Snapshot exports before touching anything — mechanical</span>
-      </div>
-      <div class="step">
-        <span class="num">3</span>
-        <span class="name">PLAN</span>
-        <span class="desc">LLM decides module boundaries from function map — the only AI step</span>
-      </div>
-      <div class="step mech">
-        <span class="num">4</span>
-        <span class="name">EXTRACT</span>
-        <span class="desc">Mechanical: copy functions by line range, resolve imports — zero tokens, instant, 100% valid. LLM fallback for unsupported languages.</span>
-      </div>
-      <div class="step mech">
-        <span class="num">5</span>
-        <span class="name">FIX-IMPORTS</span>
-        <span class="desc">Rewrite require()/import paths — mechanical</span>
-      </div>
-      <div class="step mech">
-        <span class="num">6</span>
-        <span class="name">VERIFY</span>
-        <span class="desc">Syntax check, load check, export comparison — mechanical</span>
-      </div>
-      <div class="step mech">
-        <span class="num">7</span>
-        <span class="name">METRICS</span>
-        <span class="desc">Refactory Score + HTML report with diagrams — mechanical</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Providers -->
-<section id="providers">
-  <div class="container">
-    <h2>Bring one free key</h2>
-    <p class="lead">JS &amp; Python extraction is mechanical — no key needed. You only need a free key for the PLAN step (deciding module boundaries).</p>
-    <div class="providers">
-      <div class="provider featured">
-        <div class="pname">Groq</div>
-        <div class="pdetail">Llama 3.3 70B</div>
-        <div class="pdetail">32k output / 128k context</div>
-        <div class="pdetail muted">Best for extraction — largest free output window</div>
-        <div class="badge start-here">START HERE</div>
-      </div>
-      <div class="provider">
-        <div class="pname">Gemini</div>
-        <div class="pdetail">2.5 Flash</div>
-        <div class="pdetail">16k output / 1M context</div>
-        <div class="pdetail muted">Best for planning large files</div>
-        <div class="badge">PLANNING</div>
-      </div>
-      <div class="provider">
-        <div class="pname">OpenRouter</div>
-        <div class="pdetail">Qwen 3.6+</div>
-        <div class="pdetail">16k output / 1M context</div>
-        <div class="pdetail muted">Free-tier fallback</div>
-        <div class="badge secondary">FALLBACK</div>
-      </div>
-      <div class="provider">
-        <div class="pname">SambaNova</div>
-        <div class="pdetail">MiniMax</div>
-        <div class="pdetail">16k output / 163k context</div>
-        <div class="pdetail muted">Additional coverage</div>
-        <div class="badge secondary">FALLBACK</div>
-      </div>
-    </div>
-    <p class="providers-note">All free tier. One key is enough for planning. Extraction is mechanical for JS/Python — no LLM, no tokens, no hallucinations. Other languages fall back to LLM extraction with compression.</p>
-  </div>
-</section>
-
-<!-- Refactory Score -->
-<section id="score">
-  <div class="container">
-    <h2>Refactory Score</h2>
-    <p class="lead">One number that tells you if the decomposition worked.</p>
-    <div class="score-box">
-      <div class="score-num">1.0</div>
-      <div class="score-detail">
-        <p>Every extracted module loads cleanly and the largest module is smaller than the original file. Anything below 1.0 tells you exactly what degraded.</p>
-        <div class="formula">score = clean_rate &times; size_reduction</div>
-        <div class="formula-legend">
-          <span><code>clean_rate</code> — modules that load without errors / total modules</span>
-          <span><code>size_reduction</code> — 1 − (largest output module / original file)</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Languages -->
-<section id="languages">
-  <div class="container">
-    <h2>Language support</h2>
-    <p class="lead">Mechanical extraction for popular languages. LLM fallback for everything else.</p>
-    <div class="providers">
-      <div class="provider featured">
-        <div class="pname">JavaScript / TypeScript</div>
-        <div class="pdetail">Mechanical extraction</div>
-        <div class="pdetail muted">Brace matching, import resolution, arrow functions, classes, IIFEs</div>
-        <div class="badge start-here">BUILT IN</div>
-      </div>
-      <div class="provider featured">
-        <div class="pname">Python</div>
-        <div class="pdetail">Mechanical extraction</div>
-        <div class="pdetail muted">Indentation-based, classes, async def, import resolution</div>
-        <div class="badge start-here">BUILT IN</div>
-      </div>
-      <div class="provider">
-        <div class="pname">Go, Rust, Java, C#, Kotlin, Swift</div>
-        <div class="pdetail">Premium language packs</div>
-        <div class="pdetail muted">Mechanical extraction — same guarantees, commercial license</div>
-        <div class="badge">PRO</div>
-      </div>
-      <div class="provider">
-        <div class="pname">C, COBOL, Ruby, PHP, and more</div>
-        <div class="pdetail">LLM fallback with compression</div>
-        <div class="pdetail muted">Works with any language — AI extracts when no preprocessor exists</div>
-        <div class="badge secondary">ANY LANGUAGE</div>
-      </div>
-    </div>
-    <p class="providers-note">Community can contribute preprocessors for any language. Mechanical extraction is always preferred — LLM fallback is automatic when no preprocessor exists.</p>
-  </div>
-</section>
-
-<!-- Works everywhere -->
-<section id="integrations">
-  <div class="container">
-    <h2>Works everywhere</h2>
-    <p class="lead">Any MCP client. Or just the CLI.</p>
-    <div class="integrations">
-      <div class="int-badge">Claude Code</div>
-      <div class="int-badge">Cursor</div>
-      <div class="int-badge">Windsurf</div>
-      <div class="int-badge">VS Code Copilot</div>
-      <div class="int-badge">CLI</div>
-    </div>
-  </div>
-</section>
-
-<!-- Support -->
-<section id="support">
-  <div class="container">
-    <h2>Support</h2>
-    <p class="lead">Free community help or direct pro support.</p>
-    <div class="providers">
-      <div class="provider featured">
-        <div class="pname">Community</div>
-        <div class="pdetail">Discord server</div>
-        <div class="pdetail">Bug reports via test corpus</div>
-        <div class="pdetail muted">Community answers, maintainer monitors</div>
-        <a href="https://discord.gg/kPk3NmRD" class="badge start-here" style="text-decoration:none">JOIN DISCORD</a>
-      </div>
-      <div class="provider">
-        <div class="pname">Pro Support</div>
-        <div class="pdetail">support@codedrop.codes</div>
-        <div class="pdetail">Priority response</div>
-        <div class="pdetail muted">For teams using premium language packs</div>
-        <div class="badge">PRO</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="cta">
-  <div class="container">
-    <h2>Start decomposing</h2>
-    <p class="cta-sub">Free. Open source. AGPL-3.0.</p>
-    <div class="cta-actions">
-      <a href="https://github.com/codedrop-codes/refactory" class="btn btn-primary">Star on GitHub</a>
-      <a href="https://discord.gg/kPk3NmRD" class="btn btn-outline">Join Discord</a>
-    </div>
-  </div>
-</section>
-
-<!-- Footer -->
-<footer>
-  <div class="container">
-    <p>AGPL-3.0 &middot; <a href="https://github.com/codedrop-codes/refactory">GitHub</a> &middot; <a href="https://discord.gg/kPk3NmRD">Discord</a> &middot; <a href="mailto:support@codedrop.codes">Pro Support</a> &middot; Built by <a href="https://github.com/codedrop-codes">codedrop.codes</a></p>
-  </div>
-</footer>
-
 </body>
 </html>

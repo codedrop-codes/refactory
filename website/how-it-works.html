@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FL383YRX24"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-FL383YRX24');</script>
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","w82esixpwd");</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It Works | Refactory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .pipeline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+            padding: 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .step-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .step-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-num {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--accent);
+            background: var(--accent-light);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+        }
+
+        .step-type {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .step-type.mech { color: var(--accent); }
+        .step-type.llm { color: var(--error); font-weight: 700; }
+
+        .step-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .step-card p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            flex-grow: 1;
+        }
+
+        .step-tool {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: var(--bg-primary);
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .report-visual {
+            text-align: center;
+            padding: 6rem 4rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+        }
+
+        .report-image {
+            width: 100%;
+            max-width: 1000px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <nav>
+            <a href="index.html" class="logo">
+                <img src="assets/logo.png" alt="Refactory Logo">
+                <span class="mono">REFACTORY</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Overview</a></li>
+                <li><a href="how-it-works.html" class="active">How It Works</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section style="padding: 6rem 4rem 2rem; text-align: center;">
+                <h1 class="section-title">The 7-Step Pipeline</h1>
+                <p class="section-desc">Refactory decomposes monoliths in seven distinct phases. AI handles one step (planning). The other 6 are purely <strong>deterministic</strong>&mdash;instant, reproducible, and $0 in API tokens.</p>
+            </section>
+
+            <div class="pipeline-flow">
+                <span class="flow-step mech">ANALYZE</span>
+                <span class="flow-step mech">CHARACTERIZE</span>
+                <span class="flow-step llm">PLAN</span>
+                <span class="flow-step mech">EXTRACT</span>
+                <span class="flow-step mech">FIX-IMPORTS</span>
+                <span class="flow-step mech">VERIFY</span>
+                <span class="flow-step mech">METRICS</span>
+            </div>
+
+            <div class="pipeline-grid">
+                <div class="step-card">
+                    <div class="step-header">
+                        <span class="step-num">01</span>
+                        <span class="step-type mech">Mechanical</span>
+                    </div>
+                    <h3>Analyze</h3>
+                    <p>Scans the source file using <code>ast-grep</code> to assess health, cyclomatic complexity, and coupling. Produces a detailed function map and decomposition recommendation.</p>
+                    <div class="step-tool">refactory_analyze</div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-header">
+                        <span class="step-num">02</span>
+                        <span class="step-type mech">Mechanical</span>
+                    </div>
+                    <h3>Characterize</h3>
+                    <p>Creates a <strong>Golden Snapshot</strong> of every export and its type signature. Generates a <code>node:test</code> file to catch behavioral regression during the refactor.</p>
+                    <div class="step-tool">refactory_characterize</div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-header">
+                        <span class="step-num">03</span>
+                        <span class="step-type llm">AI Powered</span>
+                    </div>
+                    <h3>Plan</h3>
+                    <p>Sends a <strong>compressed function map</strong> (not full source) to the LLM. AI decides module boundaries and inter-module dependencies with 10x token efficiency.</p>
+                    <div class="step-tool">refactory_plan</div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-header">
+                        <span class="step-num">04</span>
+                        <span class="step-type mech">Mechanical</span>
+                    </div>
+                    <h3>Extract</h3>
+                    <p>Handles the routine 80%. Deterministically copies code by line range for JS/Python, keeping the AI focused on the parts that need judgment. LLM handles complex cases and other languages.</p>
+                    <div class="step-tool">refactory_extract</div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-header">
+                        <span class="step-num">05</span>
+                        <span class="step-type mech">Mechanical</span>
+                    </div>
+                    <h3>Fix Imports</h3>
+                    <p>Automatically rewrites <code>require()</code> and <code>import</code> paths across the entire project to point to the new modular structure. No broken links.</p>
+                    <div class="step-tool">refactory_fix_imports</div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-header">
+                        <span class="step-num">06</span>
+                        <span class="step-type mech">Mechanical</span>
+                    </div>
+                    <h3>Verify</h3>
+                    <p>Runs syntax checks and load-tests on every new module. Compares the final export surface against the Golden Snapshot from Step 2 to guarantee parity.</p>
+                    <div class="step-tool">refactory_verify</div>
+                </div>
+            </div>
+
+            <section class="report-visual">
+                <h2 class="section-title" style="font-size: 2rem;">Visual Extraction Reports</h2>
+                <p class="section-desc">Every decomposition generates a comprehensive HTML report. Track your <strong>Refactory Score</strong>, view Mermaid dependency graphs, and verify syntax status at a glance.</p>
+                <img src="assets/lodash-report-hero.png" alt="Lodash Extraction Report" class="report-image">
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-copy">
+                    &copy; 2026 CodeDrop. Open Core under AGPL-3.0.
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/codedrop-codes/refactory">GitHub</a>
+                    <a href="https://discord.gg/kPk3NmRD">Discord</a>
+                    <a href="https://codedrop.codes">CodeDrop</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

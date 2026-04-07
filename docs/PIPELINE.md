@@ -89,14 +89,14 @@ The LLM returns a JSON plan: which functions go in which module, estimated sizes
 
 ### Mechanical path (JS, Python — default)
 
-If a language preprocessor exists for the file type, extraction is 100% mechanical:
+If a language preprocessor exists for the file type, the routine extractions are mechanical:
 
 1. **Detect functions** by parsing — brace matching (JS) or indentation (Python)
 2. **Copy function bodies** by line range — exact copy, no rewriting
 3. **Resolve imports** — scan each function for references to require()/import identifiers
 4. **Assemble module** — "use strict" + selective imports + function bodies + module.exports
 
-Result: zero LLM tokens, instant, guaranteed syntax validity. The provider field shows `mechanical/javascript` or `mechanical/python`.
+Result: near-zero LLM tokens for the routine cases, high syntax fidelity. The provider field shows `mechanical/javascript` or `mechanical/python`. Complex patterns (dynamic exports, deeply interleaved logic) fall through to the LLM path.
 
 ### LLM fallback (other languages)
 

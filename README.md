@@ -6,11 +6,11 @@
 [![API Cost](https://img.shields.io/badge/API%20cost-%240-green)]()
 [![Discord](https://img.shields.io/badge/Discord-join-7289da)](https://discord.gg/kPk3NmRD)
 
-> Mechanical code decomposition. AI plans the boundaries. Deterministic extraction copies the code. Zero hallucinations.
+> Hybrid code decomposition. AI plans the boundaries. A deterministic engine handles the routine extractions. Minimize tokens, maximize syntax validity.
 
 Refactory splits monolith source files into clean modules. It uses an LLM for one thing — deciding which functions group together. Everything else is mechanical: function boundary detection, import resolution, module assembly, syntax validation, scoring.
 
-**JavaScript and Python extraction is 100% mechanical.** No LLM tokens, no output truncation, no syntax errors. Guaranteed. Other languages fall back to LLM extraction with adaptive compression.
+**JavaScript and Python extraction is mostly mechanical.** The deterministic engine handles the straightforward moves — the routine 80% that's a waste of AI time and tokens. The LLM still handles complex edge cases where judgment matters. Other languages use LLM extraction with adaptive compression.
 
 Works with Claude Code, Cursor, Windsurf, VS Code Copilot — any MCP client. Or use the CLI directly.
 
@@ -22,9 +22,9 @@ Tested against 15 production monoliths:
 |--------|-------|
 | Lines decomposed | 32,736 |
 | Functions extracted | 1,017 |
-| Syntax validity | 100% |
-| LLM tokens for extraction | 0 |
-| API cost | $0 |
+| Pipeline score | 0.89 |
+| Mechanical extraction ratio | ~80% |
+| API cost (extraction) | Near zero |
 
 ## Quick Start
 
@@ -98,7 +98,7 @@ refactory test run                       # Validate preprocessors against test c
 | Go, Rust, Java, C#, Kotlin, Swift | Mechanical | [Pro](https://refactory.codedrop.codes) |
 | Everything else | LLM with compression | Automatic fallback |
 
-Mechanical extraction means: zero LLM tokens, instant, 100% syntax valid. The preprocessor finds function boundaries by parsing, copies them by line range, and resolves imports deterministically.
+Mechanical extraction handles the routine cases: the preprocessor finds function boundaries by parsing, copies them by line range, and resolves imports deterministically. Complex patterns (dynamic exports, deeply interleaved logic) still go through the LLM.
 
 [Contribute a preprocessor](CONTRIBUTING.md) for your language.
 

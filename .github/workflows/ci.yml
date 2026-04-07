@@ -44,42 +44,55 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          # Base64 encode website files
-          HTML_B64=$(base64 -w0 website/index.html)
-          CSS_B64=$(base64 -w0 website/style.css)
+          # Base64 encode all website pages and CSS
+          INDEX_B64=$(base64 -w0 website/index.html)
+          HOW_B64=$(base64 -w0 website/how-it-works.html)
+          FEATURES_B64=$(base64 -w0 website/features.html)
+          FAQ_B64=$(base64 -w0 website/faq.html)
+          PRICING_B64=$(base64 -w0 website/pricing.html)
+          CSS_B64=$(base64 -w0 website/styles.css)
+          # Keep old style.css for backwards compat
+          CSS_OLD_B64=$(base64 -w0 website/style.css 2>/dev/null || echo "$CSS_B64")
 
-          # Build worker script with inlined content
-          cat > /tmp/worker.js << 'EOF'
-          const ASSETS = {
-            "/": { body: "__HTML__", type: "text/html;charset=UTF-8" },
-            "/index.html": { body: "__HTML__", type: "text/html;charset=UTF-8" },
-            "/style.css": { body: "__CSS__", type: "text/css;charset=UTF-8" },
+          # Build worker script — pages inlined, assets fetched from GitHub
+          node -e "
+          const pages = {
+            '/': '${INDEX_B64}',
+            '/index.html': '${INDEX_B64}',
+            '/how-it-works.html': '${HOW_B64}',
+            '/features.html': '${FEATURES_B64}',
+            '/faq.html': '${FAQ_B64}',
+            '/pricing.html': '${PRICING_B64}',
+            '/styles.css': '${CSS_B64}',
+            '/style.css': '${CSS_OLD_B64}',
           };
-          const REPO = "codedrop-codes/refactory";
-          const BRANCH = "main";
-          addEventListener("fetch", event => { event.respondWith(handleRequest(event.request)); });
+          const types = { '.html': 'text/html;charset=UTF-8', '.css': 'text/css;charset=UTF-8' };
+          const script = \`
+          const PAGES = \${JSON.stringify(pages)};
+          const REPO = 'codedrop-codes/refactory';
+          const BRANCH = 'main';
+          addEventListener('fetch', e => e.respondWith(handleRequest(e.request)));
           async function handleRequest(request) {
             const url = new URL(request.url);
-            const asset = ASSETS[url.pathname];
-            if (asset) {
-              return new Response(atob(asset.body), {
-                headers: { "Content-Type": asset.type, "Cache-Control": "public, max-age=86400" },
-              });
+            let p = url.pathname;
+            if (p.endsWith('/') && p !== '/') p = p.slice(0, -1);
+            const page = PAGES[p];
+            if (page) {
+              const ext = p.includes('.css') ? 'text/css;charset=UTF-8' : 'text/html;charset=UTF-8';
+              return new Response(atob(page), { headers: { 'Content-Type': ext, 'Cache-Control': 'public, max-age=3600' } });
             }
-            if (url.pathname.startsWith("/assets/")) {
-              const ghUrl = `https://raw.githubusercontent.com/${REPO}/${BRANCH}/website${url.pathname}`;
+            if (p.startsWith('/assets/') || p === '/og-image.png' || p === '/og-image.svg') {
+              const ghUrl = 'https://raw.githubusercontent.com/' + REPO + '/' + BRANCH + '/website' + p;
               const resp = await fetch(ghUrl, { cf: { cacheTtl: 86400, cacheEverything: true } });
               if (resp.ok) return new Response(resp.body, {
-                headers: { "Content-Type": resp.headers.get("Content-Type") || "application/octet-stream", "Cache-Control": "public, max-age=86400" },
+                headers: { 'Content-Type': resp.headers.get('Content-Type') || 'application/octet-stream', 'Cache-Control': 'public, max-age=86400' }
               });
             }
-            return new Response("Not found", { status: 404 });
+            return new Response('Not found', { status: 404 });
           }
-          EOF
-
-          # Inject base64 content
-          sed -i "s|__HTML__|${HTML_B64}|g" /tmp/worker.js
-          sed -i "s|__CSS__|${CSS_B64}|g" /tmp/worker.js
+          \`;
+          require('fs').writeFileSync('/tmp/worker.js', script);
+          "
 
           # Deploy to Cloudflare
           curl -sf -X PUT \

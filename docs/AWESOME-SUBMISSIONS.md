@@ -11,7 +11,7 @@ Pre-written entries for submitting Refactory to awesome lists. Each is formatted
 **Entry:**
 
 ```markdown
-- [Refactory](https://github.com/codedrop-codes/refactory) - Mechanical code decomposition MCP server. AI plans module boundaries, deterministic extraction copies the code. JS/Python built in, zero hallucinations.
+- [Refactory](https://github.com/codedrop-codes/refactory) - Hybrid code decomposition MCP server. AI plans module boundaries, deterministic engine handles routine extractions. JS/Python built in.
 ```
 
 ---
@@ -23,7 +23,7 @@ Pre-written entries for submitting Refactory to awesome lists. Each is formatted
 **Entry:**
 
 ```markdown
-- [Refactory](https://github.com/codedrop-codes/refactory) - Mechanical code decomposition. Splits monoliths into modules with deterministic extraction (JS/Python), LLM fallback for other languages, syntax validation, and a single quality score. 32,000+ lines tested, 100% syntax valid.
+- [Refactory](https://github.com/codedrop-codes/refactory) - Hybrid code decomposition. Splits monoliths into modules with deterministic extraction for routine cases (JS/Python), LLM for complex patterns and other languages, syntax validation, and a single quality score. 32,000+ lines tested.
 ```
 
 ---
@@ -47,5 +47,5 @@ Pre-written entries for submitting Refactory to awesome lists. Each is formatted
 **Entry:**
 
 ```markdown
-- [Refactory](https://github.com/codedrop-codes/refactory) - Hybrid monolith-to-modules decomposition. Mechanical extraction copies functions by line range (100% syntax valid). LLM only decides module boundaries. Generates characterization tests, fixes imports deterministically, verifies every module loads. $0 API cost.
+- [Refactory](https://github.com/codedrop-codes/refactory) - Hybrid monolith-to-modules decomposition. Mechanical extraction handles routine moves by line range. LLM plans boundaries and handles complex cases. Generates characterization tests, fixes imports deterministically, verifies every module loads. Near-zero extraction cost.
 ```
