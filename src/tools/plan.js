@@ -48,7 +48,7 @@ function extractFunctionMap(source) {
  * Build module groups by camelCase prefix for mechanical planning.
  * Merges small groups together to avoid too many tiny modules.
  */
-function buildPrefixGroups(functions, maxLines) {
+function buildPrefixGroups(functions, maxLines, maxModules = 25, maxFunctionsPerModule = 30) {
   // Group by camelCase prefix
   const groups = new Map();
   for (const fn of functions) {
@@ -68,17 +68,20 @@ function buildPrefixGroups(functions, maxLines) {
     totalLines: fns.reduce((s, f) => s + f.estimatedLines, 0),
   })).sort((a, b) => b.totalLines - a.totalLines);
 
-  // Merge small modules (< 50 lines) into neighbors
-  const merged = [];
+  // Sort by source position for predictable output
+  modules.sort((a, b) => a.functions[0].line - b.functions[0].line);
+
+  // Phase 1: Merge tiny groups (< 30 lines) into neighbors
+  let merged = [];
   let bucket = null;
-  for (const mod of modules.sort((a, b) => a.functions[0].line - b.functions[0].line)) {
-    if (mod.totalLines >= 50) {
+  for (const mod of modules) {
+    if (mod.totalLines >= 30 && mod.functions.length >= 2) {
       if (bucket) merged.push(bucket);
       merged.push(mod);
       bucket = null;
     } else {
       if (!bucket) {
-        bucket = { ...mod, prefix: "misc", name: "misc-helpers" };
+        bucket = { ...mod, prefix: "misc", name: "misc-helpers", functions: [...mod.functions] };
       } else {
         bucket.functions.push(...mod.functions);
         bucket.totalLines += mod.totalLines;
@@ -91,7 +94,44 @@ function buildPrefixGroups(functions, maxLines) {
   }
   if (bucket) merged.push(bucket);
 
-  return merged;
+  // Phase 2: If still over maxModules, keep merging the two smallest adjacent groups
+  while (merged.length > maxModules) {
+    let minSum = Infinity, minIdx = 0;
+    for (let i = 0; i < merged.length - 1; i++) {
+      const sum = merged[i].totalLines + merged[i + 1].totalLines;
+      if (sum < minSum) { minSum = sum; minIdx = i; }
+    }
+    const a = merged[minIdx], b = merged[minIdx + 1];
+    const combined = {
+      prefix: a.prefix + "-" + b.prefix,
+      name: a.totalLines >= b.totalLines ? a.name : b.name,
+      functions: [...a.functions, ...b.functions],
+      totalLines: a.totalLines + b.totalLines,
+    };
+    merged.splice(minIdx, 2, combined);
+  }
+
+  // Phase 3: Split any module over maxFunctionsPerModule
+  const final = [];
+  for (const mod of merged) {
+    if (mod.functions.length <= maxFunctionsPerModule) {
+      final.push(mod);
+    } else {
+      // Split into chunks
+      for (let i = 0; i < mod.functions.length; i += maxFunctionsPerModule) {
+        const chunk = mod.functions.slice(i, i + maxFunctionsPerModule);
+        const partNum = Math.floor(i / maxFunctionsPerModule) + 1;
+        final.push({
+          prefix: mod.prefix,
+          name: mod.name.replace(".js", "") + "-part" + partNum,
+          functions: chunk,
+          totalLines: chunk.reduce((s, f) => s + f.estimatedLines, 0),
+        });
+      }
+    }
+  }
+
+  return final;
 }
 
 /**
@@ -138,11 +178,14 @@ async function plan(args) {
   const { getPreprocessor } = require("../languages");
   const preprocessor = getPreprocessor(filePath);
   let effectiveSource = source;
-  if (preprocessor && preprocessor.unwrapIIFE) {
-    const { source: unwrapped, unwrapped: didUnwrap } = preprocessor.unwrapIIFE(source);
-    if (didUnwrap) {
-      effectiveSource = unwrapped;
-      logger.debug("IIFE wrapper detected and unwrapped for planning");
+  if (preprocessor) {
+    if (preprocessor.stripIgnoreRegions) {
+      const { source: stripped, stripped: didStrip } = preprocessor.stripIgnoreRegions(source);
+      if (didStrip) { effectiveSource = stripped; logger.debug("@refactory-ignore regions stripped"); }
+    }
+    if (preprocessor.unwrapIIFE) {
+      const { source: unwrapped, unwrapped: didUnwrap } = preprocessor.unwrapIIFE(effectiveSource);
+      if (didUnwrap) { effectiveSource = unwrapped; logger.debug("IIFE wrapper detected and unwrapped for planning"); }
     }
   }
 
@@ -152,7 +195,7 @@ async function plan(args) {
 
   // For very large function lists, use mechanical grouping by prefix — no LLM needed
   if (functionMap.functions.length > 150) {
-    const groups = buildPrefixGroups(functionMap.functions, maxLines);
+    const groups = buildPrefixGroups(functionMap.functions, maxLines, args.maxModules || 25, args.maxFunctionsPerModule || 30);
     const modules = groups.map(g => ({
       name: g.name + ".js",
       description: `${g.prefix}* functions (${g.functions.length} fns)`,

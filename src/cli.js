@@ -153,11 +153,15 @@ async function cmdDecompose(args) {
 
   const outputDir = parseFlag(args, "--output-dir", null);
   const maxLines = parseFlag(args, "--max-lines", null);
+  const maxModules = parseFlag(args, "--max-modules", null);
+  const maxFunctionsPerModule = parseFlag(args, "--max-functions-per-module", null);
   const projectDir = parseFlag(args, "--project-dir", null);
 
   const opts = { file };
   if (outputDir) opts.outputDir = outputDir;
   if (maxLines) opts.maxLines = Number(maxLines);
+  if (maxModules) opts.maxModules = Number(maxModules);
+  if (maxFunctionsPerModule) opts.maxFunctionsPerModule = Number(maxFunctionsPerModule);
   if (projectDir) opts.projectDir = projectDir;
 
   header("Refactory Decompose");
@@ -324,6 +328,8 @@ ${color("Test Corpus:", BOLD)}
 
 ${color("Options:", BOLD)}
   --max-lines N               Max lines per module (plan/decompose, default: 500)
+  --max-modules N             Target max number of output modules (default: 25)
+  --max-functions-per-module N  Max functions per module before splitting (default: 30)
   --style functional|domain   Grouping strategy (plan, default: functional)
   --output-dir <dir>          Output directory (decompose, default: <dir>/lib/<basename>/)
   --project-dir <dir>         Project root for dependency mapping (decompose)

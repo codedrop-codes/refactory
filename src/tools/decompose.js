@@ -74,7 +74,7 @@ async function decompose(args) {
   // Step 4: Plan (via LLM)
   let planResult;
   try {
-    planResult = await plan({ file: filePath, maxLines });
+    planResult = await plan({ file: filePath, maxLines, maxModules: args.maxModules, maxFunctionsPerModule: args.maxFunctionsPerModule });
     result.steps.plan = planResult;
     const moduleCount = planResult.modules?.length || 0;
     const provider = planResult._meta?.provider || "unknown";

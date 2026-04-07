@@ -10,6 +10,22 @@
 // ── IIFE unwrapping ────────────────────────────────────────────────
 
 /**
+ * Strip regions marked with @refactory-ignore-start / @refactory-ignore-end.
+ * Users can wrap IIFE wrappers, license blocks, or any boilerplate they want skipped.
+ */
+function stripIgnoreRegions(source) {
+  const lines = source.split("\n");
+  const kept = [];
+  let ignoring = false;
+  for (const line of lines) {
+    if (line.includes("@refactory-ignore-start")) { ignoring = true; continue; }
+    if (line.includes("@refactory-ignore-end")) { ignoring = false; continue; }
+    if (!ignoring) kept.push(line);
+  }
+  return { source: kept.join("\n"), stripped: kept.length < lines.length };
+}
+
+/**
  * Detect and strip IIFE wrappers — ;(function() { ... }).call(this) etc.
  * Returns { source, unwrapped } where source is the inner body if IIFE found.
  * Supports: (function(){...}()), (function(){...}).call(this), !function(){...}()
@@ -401,8 +417,9 @@ function assembleModule(functions, importLines, options = {}) {
  * @returns {{ code: string, extracted: string[], missing: string[] }}
  */
 function extractModule(source, functionNames) {
-  // Auto-unwrap IIFE wrappers so inner functions become top-level
-  const { source: effectiveSource, unwrapped } = unwrapIIFE(source);
+  // Strip user-marked ignore regions first, then auto-unwrap IIFEs
+  const { source: stripped } = stripIgnoreRegions(source);
+  const { source: effectiveSource, unwrapped } = unwrapIIFE(stripped);
   const lines = effectiveSource.split("\n");
   const allFunctions = detectFunctions(effectiveSource);
   const allImports = detectImports(source);
@@ -542,6 +559,7 @@ module.exports = {
   assembleModule,
   extractModule,
   unwrapIIFE,
+  stripIgnoreRegions,
   // Exported for testing
   findBlockEnd,
 };
