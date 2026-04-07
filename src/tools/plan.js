@@ -15,9 +15,18 @@ function extractFunctionMap(source) {
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
-    const fnMatch = line.match(/^(?:async\s+)?function\s+(\w+)\s*\(([^)]*)\)/);
+    const trimmed = line.trimStart();
+    // Named function declarations (any indent level — handles IIFEs)
+    const fnMatch = trimmed.match(/^(?:export\s+)?(?:async\s+)?function\s+(\w+)\s*\(([^)]*)\)/);
     if (fnMatch) {
       functions.push({ name: fnMatch[1], params: fnMatch[2].trim(), line: i + 1 });
+    }
+    // var/const/let name = function( or arrow
+    if (!fnMatch) {
+      const exprMatch = trimmed.match(/^(?:export\s+)?(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s+)?(?:function\s*)?\(([^)]*)\)/);
+      if (exprMatch) {
+        functions.push({ name: exprMatch[1], params: exprMatch[2].trim(), line: i + 1 });
+      }
     }
     const reqMatch = line.match(/require\(["']([^"']+)["']\)/);
     if (reqMatch && !requires.includes(reqMatch[1])) {
