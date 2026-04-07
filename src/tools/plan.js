@@ -44,24 +44,150 @@ function extractFunctionMap(source) {
   return { functions, requires, totalLines: lines.length };
 }
 
+/**
+ * Build module groups by camelCase prefix for mechanical planning.
+ * Merges small groups together to avoid too many tiny modules.
+ */
+function buildPrefixGroups(functions, maxLines) {
+  // Group by camelCase prefix
+  const groups = new Map();
+  for (const fn of functions) {
+    const parts = fn.name.replace(/([a-z])([A-Z])/g, "$1\0$2").split("\0");
+    let prefix = parts[0].toLowerCase();
+    if (prefix.length <= 2 && parts.length > 1) prefix += parts[1].toLowerCase();
+    if (prefix === "_" || prefix === "") prefix = "internal";
+    if (!groups.has(prefix)) groups.set(prefix, []);
+    groups.get(prefix).push(fn);
+  }
+
+  // Build initial module list
+  let modules = [...groups.entries()].map(([prefix, fns]) => ({
+    prefix,
+    name: prefix + "-utils",
+    functions: fns,
+    totalLines: fns.reduce((s, f) => s + f.estimatedLines, 0),
+  })).sort((a, b) => b.totalLines - a.totalLines);
+
+  // Merge small modules (< 50 lines) into neighbors
+  const merged = [];
+  let bucket = null;
+  for (const mod of modules.sort((a, b) => a.functions[0].line - b.functions[0].line)) {
+    if (mod.totalLines >= 50) {
+      if (bucket) merged.push(bucket);
+      merged.push(mod);
+      bucket = null;
+    } else {
+      if (!bucket) {
+        bucket = { ...mod, prefix: "misc", name: "misc-helpers" };
+      } else {
+        bucket.functions.push(...mod.functions);
+        bucket.totalLines += mod.totalLines;
+        if (bucket.totalLines >= maxLines) {
+          merged.push(bucket);
+          bucket = null;
+        }
+      }
+    }
+  }
+  if (bucket) merged.push(bucket);
+
+  return merged;
+}
+
+/**
+ * Group functions by common prefix to produce a condensed summary.
+ * E.g. arrayEach, arrayFilter, arrayMap → "array*" (3 fns, ~35L avg)
+ */
+function condenseFunctionMap(functions) {
+  // Group by camelCase prefix: arrayEach → "array", baseFlatten → "base"
+  const groups = new Map();
+  for (const fn of functions) {
+    // Split camelCase: "arrayEachRight" → ["array", "Each", "Right"]
+    const parts = fn.name.replace(/([a-z])([A-Z])/g, "$1\0$2").split("\0");
+    // Use first segment, or first two if first is very short (1-2 chars)
+    let prefix = parts[0].toLowerCase();
+    if (prefix.length <= 2 && parts.length > 1) prefix += parts[1].toLowerCase();
+    // Collapse single-char prefixes like _ to "internal"
+    if (prefix === "_" || prefix === "") prefix = "internal";
+    if (!groups.has(prefix)) groups.set(prefix, []);
+    groups.get(prefix).push(fn);
+  }
+
+  const lines = [];
+  for (const [prefix, fns] of [...groups.entries()].sort((a, b) => b[1].length - a[1].length)) {
+    const totalLines = fns.reduce((s, f) => s + f.estimatedLines, 0);
+    const avgLines = Math.round(totalLines / fns.length);
+    if (fns.length === 1) {
+      const f = fns[0];
+      lines.push(`  ${f.name}(${f.params}) — ${f.estimatedLines}L`);
+    } else {
+      const names = fns.map(f => f.name);
+      lines.push(`  ${prefix}* group (${fns.length} fns, ~${avgLines}L avg): ${names.join(", ")}`);
+    }
+  }
+  return lines.join("\n");
+}
+
 async function plan(args) {
   const filePath = path.resolve(args.file);
   const source = fs.readFileSync(filePath, "utf8");
   const maxLines = args.maxLines || 500;
   const style = args.style || "functional";
 
+  // Auto-unwrap IIFEs before extracting function map
+  const { getPreprocessor } = require("../languages");
+  const preprocessor = getPreprocessor(filePath);
+  let effectiveSource = source;
+  if (preprocessor && preprocessor.unwrapIIFE) {
+    const { source: unwrapped, unwrapped: didUnwrap } = preprocessor.unwrapIIFE(source);
+    if (didUnwrap) {
+      effectiveSource = unwrapped;
+      logger.debug("IIFE wrapper detected and unwrapped for planning");
+    }
+  }
+
   // Send function map instead of full source — fits in any provider's context
-  const functionMap = extractFunctionMap(source);
+  const functionMap = extractFunctionMap(effectiveSource);
   const estimatedInputTokens = Math.ceil(JSON.stringify(functionMap).length / 4);
+
+  // For very large function lists, use mechanical grouping by prefix — no LLM needed
+  if (functionMap.functions.length > 150) {
+    const groups = buildPrefixGroups(functionMap.functions, maxLines);
+    const modules = groups.map(g => ({
+      name: g.name + ".js",
+      description: `${g.prefix}* functions (${g.functions.length} fns)`,
+      functions: g.functions.map(f => f.name),
+      estimatedLines: g.totalLines,
+      dependencies: [],
+    }));
+    const planData = { modules, indexExports: [], sharedHelpers: [] };
+    planData._meta = {
+      provider: "mechanical/prefix-grouping",
+      sourceFile: filePath,
+      sourceLines: functionMap.totalLines,
+      functionCount: functionMap.functions.length,
+      generatedAt: new Date().toISOString(),
+    };
+    logger.step("PLAN", {
+      file: filePath,
+      modules: modules.length,
+      provider: "mechanical/prefix-grouping",
+      durationMs: 0,
+    });
+    return planData;
+  }
+
+  const functionList = functionMap.functions.map((f) => `  ${f.line}-${f.endLine} (${f.estimatedLines}L): ${f.name}(${f.params})`).join("\n");
 
   const prompt = `You are a senior software architect. Analyze this function map and produce a JSON decomposition plan.
 
 Target: split into modules of max ${maxLines} lines each.
 Grouping style: ${style}
 Total source lines: ${functionMap.totalLines}
+${conciseNote}
 
 Function map (${functionMap.functions.length} functions):
-${functionMap.functions.map((f) => `  ${f.line}-${f.endLine} (${f.estimatedLines}L): ${f.name}(${f.params})`).join("\n")}
+${functionList}
 
 Dependencies (require):
 ${functionMap.requires.map((r) => `  ${r}`).join("\n")}

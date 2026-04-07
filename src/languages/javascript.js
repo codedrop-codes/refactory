@@ -7,6 +7,45 @@
  * and assembles modules — zero LLM tokens, 100% syntax-valid output.
  */
 
+// ── IIFE unwrapping ────────────────────────────────────────────────
+
+/**
+ * Detect and strip IIFE wrappers — ;(function() { ... }).call(this) etc.
+ * Returns { source, unwrapped } where source is the inner body if IIFE found.
+ * Supports: (function(){...}()), (function(){...}).call(this), !function(){...}()
+ */
+function unwrapIIFE(source) {
+  const lines = source.split("\n");
+
+  // Find IIFE opening in first 20 lines (allow license comments before it)
+  let openLine = -1;
+  for (let i = 0; i < Math.min(20, lines.length); i++) {
+    const t = lines[i].trim();
+    if (/^[;!]?\s*\(?\s*function\s*\(/.test(t)) {
+      openLine = i;
+      break;
+    }
+  }
+  if (openLine === -1) return { source, unwrapped: false };
+
+  // Find IIFE closing in last 20 lines
+  let closeLine = -1;
+  for (let i = lines.length - 1; i >= Math.max(0, lines.length - 20); i--) {
+    const t = lines[i].trim();
+    if (/^\}\s*\)\s*[;.]?\s*$/.test(t) || /^\}\s*\.\s*call\s*\(/.test(t) || /^\}\s*\(\s*\)\s*\)\s*;?\s*$/.test(t)) {
+      closeLine = i;
+      break;
+    }
+  }
+  if (closeLine === -1) return { source, unwrapped: false };
+
+  // Extract inner body, preserving everything before the IIFE (license comments)
+  const before = lines.slice(0, openLine).join("\n");
+  const inner = lines.slice(openLine + 1, closeLine).join("\n");
+  const result = before ? before + "\n" + inner : inner;
+  return { source: result, unwrapped: true };
+}
+
 // ── Function detection ──────────────────────────────────────────────
 
 const FUNC_PATTERNS = [
@@ -291,6 +330,25 @@ function resolveImports(functions, imports, source) {
   return result;
 }
 
+// ── Dedent utility ──────────────────────────────────────────────────
+
+/**
+ * Remove common leading whitespace from a code block.
+ * Handles functions extracted from inside IIFEs or nested scopes.
+ */
+function dedentBlock(text) {
+  const lines = text.split("\n");
+  // Find minimum indentation (ignoring empty lines)
+  let minIndent = Infinity;
+  for (const line of lines) {
+    if (!line.trim()) continue;
+    const indent = line.match(/^(\s*)/)[1].length;
+    if (indent < minIndent) minIndent = indent;
+  }
+  if (minIndent === 0 || minIndent === Infinity) return text;
+  return lines.map((line) => line.slice(minIndent)).join("\n");
+}
+
 // ── Module assembly ─────────────────────────────────────────────────
 
 /**
@@ -314,9 +372,9 @@ function assembleModule(functions, importLines, options = {}) {
     parts.push("");
   }
 
-  // Function bodies
+  // Function bodies (dedented to top level if extracted from nested scope)
   for (let i = 0; i < functions.length; i++) {
-    parts.push(functions[i].body);
+    parts.push(dedentBlock(functions[i].body));
     if (i < functions.length - 1) parts.push("");
   }
 
@@ -343,8 +401,10 @@ function assembleModule(functions, importLines, options = {}) {
  * @returns {{ code: string, extracted: string[], missing: string[] }}
  */
 function extractModule(source, functionNames) {
-  const lines = source.split("\n");
-  const allFunctions = detectFunctions(source);
+  // Auto-unwrap IIFE wrappers so inner functions become top-level
+  const { source: effectiveSource, unwrapped } = unwrapIIFE(source);
+  const lines = effectiveSource.split("\n");
+  const allFunctions = detectFunctions(effectiveSource);
   const allImports = detectImports(source);
   const importMap = resolveImports(allFunctions, allImports, source);
 
@@ -481,6 +541,7 @@ module.exports = {
   resolveImports,
   assembleModule,
   extractModule,
+  unwrapIIFE,
   // Exported for testing
   findBlockEnd,
 };
