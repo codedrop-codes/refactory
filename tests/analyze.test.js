@@ -80,8 +80,8 @@ describe("analyze tool", () => {
     const result = await analyze({ file: ROUTER });
     // router.js uses node: built-ins (external)
     assert.ok(result.externalRequires.length >= 2, "should find external requires");
-    // router.js has no local imports
-    assert.equal(result.internalRequires.length, 0, "router has no internal requires");
+    // router.js has one local import (../logger)
+    assert.equal(result.internalRequires.length, 1, "router has one internal require");
   });
 
   test("health scoring reflects file size", async () => {
