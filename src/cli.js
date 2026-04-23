@@ -21,6 +21,7 @@ const { verify } = require("./tools/verify");
 const { metrics } = require("./tools/metrics");
 const { report } = require("./tools/report");
 const { decompose } = require("./tools/decompose");
+const { analyze: analyzeFunctionBranches } = require("./tools/function-branches");
 const { getAvailableProviders, CAPABILITY_SLOTS } = require("./providers/router");
 const { listLanguages } = require("./languages");
 const { submit: submitCorpus, runCorpus } = require("./test-corpus");
@@ -107,6 +108,42 @@ async function cmdAnalyze(args) {
   const rec = result.recommendation;
   const recColor = rec === "ok" ? GREEN : rec === "consider_decompose" ? YELLOW : RED;
   process.stdout.write(`  ${color(rec.toUpperCase().replace(/_/g, " "), recColor + BOLD)}\n\n`);
+
+  return result;
+}
+
+async function cmdAnalyzeFn(args) {
+  const file = args[0];
+  if (!file) die("Usage: refactory analyze-fn <file> --fn <fn-name> [--min-branch-lines N]");
+  const fnName = parseFlag(args, "--fn", null);
+  if (!fnName) die("Missing --fn <fn-name>");
+  const minBranchLines = parseInt(parseFlag(args, "--min-branch-lines", "5"), 10);
+
+  const result = analyzeFunctionBranches(file, fnName, { minBranchLines });
+
+  header(`Function Branch Analysis — ${result.fn.name}`);
+  process.stdout.write(`  Function:   ${color(result.fn.name, BOLD)} (lines ${result.fn.startLine}-${result.fn.endLine}, ${result.fn.lineCount}L)\n`);
+  process.stdout.write(`  Candidates: ${color(String(result.candidates.length), BOLD)} (dropped ${result.dropped} below ${result.minBranchLines}L threshold)\n\n`);
+
+  if (result.candidates.length === 0) {
+    process.stdout.write(`  ${color("No extractable branches found at this threshold.", DIM)}\n`);
+    process.stdout.write(`  Try --min-branch-lines 3 for a finer breakdown.\n\n`);
+    return result;
+  }
+
+  for (const c of result.candidates) {
+    const sizeColor = c.lineCount > 50 ? RED : c.lineCount > 20 ? YELLOW : GREEN;
+    const retTag = c.endsInReturn ? color(" → return", CYAN) : "";
+    process.stdout.write(`  ${color(`[${c.kind}]`, BOLD)} lines ${c.startLine}-${c.endLine}  ${color(`${c.lineCount}L`, sizeColor)}${retTag}\n`);
+    process.stdout.write(`    ${color(c.preview, DIM)}\n`);
+    const freeShort = c.freeVariables.slice(0, 12);
+    const freeMore = c.freeVariables.length > 12 ? ` +${c.freeVariables.length - 12} more` : "";
+    process.stdout.write(`    ${color(`free-vars (${c.freeVariables.length}):`, DIM)} ${freeShort.join(", ")}${freeMore}\n\n`);
+  }
+
+  const totalBranchLines = result.candidates.reduce((s, c) => s + c.lineCount, 0);
+  const residual = result.fn.lineCount - totalBranchLines;
+  process.stdout.write(`  ${color("If all branches extracted:", BOLD)} function body ≈ ${residual}L + ${result.candidates.length} helper(s)\n\n`);
 
   return result;
 }
@@ -316,6 +353,7 @@ ${color("refactory", BOLD)} — mechanical code decomposition
 
 ${color("Commands:", BOLD)}
   analyze <file>              Health check: functions, dependencies, health score
+  analyze-fn <file> --fn NAME Report extractable branches inside a function (non-destructive)
   plan <file>                 Generate decomposition plan (requires LLM key)
   decompose <file>            Full pipeline: analyze → plan → extract all → verify → report
   verify <dir>                Verify an extracted module directory
@@ -357,6 +395,7 @@ async function main() {
   try {
     switch (cmd) {
       case "analyze":    await cmdAnalyze(args); break;
+      case "analyze-fn": await cmdAnalyzeFn(args); break;
       case "plan":       await cmdPlan(args); break;
       case "decompose":  await cmdDecompose(args); break;
       case "verify":     await cmdVerify(args); break;

@@ -222,6 +222,10 @@ async function plan(args) {
 
   const functionList = functionMap.functions.map((f) => `  ${f.line}-${f.endLine} (${f.estimatedLines}L): ${f.name}(${f.params})`).join("\n");
 
+  const conciseNote = functionMap.totalLines > 2000
+    ? "Note: large file — prefer fewer, coarser modules over many small ones."
+    : "";
+
   const prompt = `You are a senior software architect. Analyze this function map and produce a JSON decomposition plan.
 
 Target: split into modules of max ${maxLines} lines each.

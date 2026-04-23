@@ -298,8 +298,16 @@ async function callWithFallback(prompt, options = {}) {
     } catch (error) {
       logger.debug(`Provider ${provider.id} failed: ${error.message}`);
       errors.push({ provider: provider.id, error: error.message });
-      // Continue to next provider on rate limits and timeouts; break on other errors
-      if (!error.message.startsWith("RATE_LIMITED") && !error.message.includes("timeout")) break;
+      // Continue to next provider on rate limits, timeouts, and provider-specific
+      // access errors (403/401) — those may succeed against another provider.
+      // Break only on prompt/usage errors (400 with validation) or no-more-providers.
+      const isRecoverable =
+        error.message.startsWith("RATE_LIMITED") ||
+        error.message.includes("timeout") ||
+        error.message.includes("HTTP 403") ||
+        error.message.includes("HTTP 401") ||
+        error.message.includes("HTTP 5");
+      if (!isRecoverable) break;
     }
   }
 
